@@ -1,0 +1,1719 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/7/2019 12:20:21 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-SJ08IUG"
+  DTS:CreatorName="DESKTOP-SJ08IUG\hp"
+  DTS:DTSID="{8178B11B-C665-47BD-AB36-A57F43ECB100}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.1100.123"
+  DTS:LocaleID="1055"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="13"
+  DTS:VersionGUID="{FE80C5C2-0F3B-4EEF-A6BE-182958069A18}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{AFCD9CE1-0AC1-4B9E-ABC5-DF8279EBD396}"
+      DTS:ObjectName="DESKTOP-SJ08IUG\MSSQLSERVER13.Proje">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=DESKTOP-SJ08IUG\MSSQLSERVER13;Initial Catalog=Proje;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{C362D5F7-0FDF-48CD-A98A-F77478F09B1C}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="FirmaYaz">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{3ADFC9B8-0325-468A-BD9E-5968BAE7BFB5}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="HalfMinMax">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{328058A6-EBDE-47D5-BD23-0658F519851B}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="WeightedCredibility">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\CalculateHalfMinMax"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{02500794-EA4B-4D7E-A766-33E0D4F8EA68}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CalculateHalfMinMax"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{AFCD9CE1-0AC1-4B9E-ABC5-DF8279EBD396}"
+          SQLTask:SqlStatementSource="SELECT (MIN(Iskonto)+MAX(Iskonto))/2 AS HalfMinMax FROM FirmaData"
+          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="HalfMinMax"
+            SQLTask:DtsVariableName="User::HalfMinMax" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\CalculateWeightedCredibility"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{6C936394-81A1-4E29-9CD0-0FE3506E6741}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CalculateWeightedCredibility"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{AFCD9CE1-0AC1-4B9E-ABC5-DF8279EBD396}"
+          SQLTask:SqlStatementSource="SELECT ROUND(SUM(Kredibilite*YEAR(GETDATE()-KurulusTarihi))/SUM(YEAR(GETDATE()-KurulusTarihi)),-1) AS WeightedCredibility FROM FirmaData"
+          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="WeightedCredibility"
+            SQLTask:DtsVariableName="User::WeightedCredibility" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\CreateTableFirmaData"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{A1A9B8B2-6BB1-473E-A5D2-DCA472976437}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CreateTableFirmaData"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{AFCD9CE1-0AC1-4B9E-ABC5-DF8279EBD396}"
+          SQLTask:SqlStatementSource="CREATE TABLE [dbo].[FirmaData](&#xA;&#x9;[FirmaKod] [tinyint] NULL,&#xA;&#x9;[Sehir] [nvarchar](10) NULL,&#xA;&#x9;[KurulusTarihi] [smalldatetime] NULL,&#xA;&#x9;[Kredibilite] [tinyint] NULL,&#xA;&#x9;[Iskonto] [tinyint] NULL&#xA;)" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\DropTableFirmaData"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{1218EC97-1547-4F6E-9F38-F0E96C9AC880}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="DropTableFirmaData"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{AFCD9CE1-0AC1-4B9E-ABC5-DF8279EBD396}"
+          SQLTask:SqlStatementSource="DROP TABLE IF EXISTS [dbo].[FirmaData]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\InsertDataInfirmaData"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{74800751-2C2E-41AD-BB91-132B47361B62}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="InsertDataInfirmaData"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{AFCD9CE1-0AC1-4B9E-ABC5-DF8279EBD396}"
+          SQLTask:SqlStatementSource="INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (100, N'İstanbul', CAST(N'2009-06-07T00:00:00' AS SmallDateTime), 100, 30)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (101, N'Ankara', CAST(N'2005-02-10T00:00:00' AS SmallDateTime), 20, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (102, N'İstanbul', CAST(N'2011-08-07T00:00:00' AS SmallDateTime), 70, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (103, N'Sakarya', CAST(N'2008-10-29T00:00:00' AS SmallDateTime), 70, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (104, N'Kocaeli', CAST(N'2009-05-18T00:00:00' AS SmallDateTime), 0, 0)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (105, N'Bursa', CAST(N'2016-09-24T00:00:00' AS SmallDateTime), 60, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (106, N'Bolu', CAST(N'1999-03-19T00:00:00' AS SmallDateTime), 40, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (107, N'Sakarya', CAST(N'2016-04-10T00:00:00' AS SmallDateTime), 60, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (108, N'İstanbul', CAST(N'2013-04-17T00:00:00' AS SmallDateTime), 100, 30)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (109, N'İstanbul', CAST(N'2007-05-29T00:00:00' AS SmallDateTime), 50, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (110, N'Ankara', CAST(N'2008-11-24T00:00:00' AS SmallDateTime), 10, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (111, N'Gümüşhane', CAST(N'1997-07-17T00:00:00' AS SmallDateTime), 100, 30)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (112, N'Antalya', CAST(N'2012-03-27T00:00:00' AS SmallDateTime), 80, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (113, N'Kayseri', CAST(N'1996-05-28T00:00:00' AS SmallDateTime), 30, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (114, N'Ankara', CAST(N'2006-01-02T00:00:00' AS SmallDateTime), 50, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (115, N'Düzce', CAST(N'2017-06-26T00:00:00' AS SmallDateTime), 100, 30)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (116, N'Sakarya', CAST(N'2015-01-02T00:00:00' AS SmallDateTime), 10, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (117, N'İstanbul', CAST(N'2004-08-24T00:00:00' AS SmallDateTime), 10, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (118, N'İstanbul', CAST(N'1998-10-18T00:00:00' AS SmallDateTime), 60, NULL)&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\ReplaceNullIsInFirmaData"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{26F77C6B-1FC7-4847-8D21-FFB764449657}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="ReplaceNullIsInFirmaData"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="CalculateFirmaYas"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Inputs[Derived Column Input].Columns[KurulusTarihi]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="KurulusTarihi"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Output].Columns[FirmaYas]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Output].Columns[FirmaYas]"
+                      name="FirmaYas"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[YEAR]([GETDATE]()) - [YEAR](#{Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]})</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">YEAR(GETDATE()) - YEAR(KurulusTarihi)</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="FirmaDataOLEDBSource"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[FirmaData]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1254</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[FirmaKod]"
+                      dataType="ui1"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[FirmaKod]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[FirmaKod]"
+                      name="FirmaKod"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Sehir]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Sehir]"
+                      length="10"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Sehir]"
+                      name="Sehir"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[KurulusTarihi]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]"
+                      name="KurulusTarihi"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]"
+                      dataType="ui1"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Kredibilite]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]"
+                      name="Kredibilite"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]"
+                      dataType="ui1"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Iskonto]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]"
+                      name="Iskonto"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[FirmaKod]"
+                      dataType="ui1"
+                      name="FirmaKod" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Sehir]"
+                      dataType="wstr"
+                      length="10"
+                      name="Sehir" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[KurulusTarihi]"
+                      dataType="dbTimeStamp"
+                      name="KurulusTarihi" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Kredibilite]"
+                      dataType="ui1"
+                      name="Kredibilite" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Iskonto]"
+                      dataType="ui1"
+                      name="Iskonto" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[FirmaKod]"
+                      dataType="ui1"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[FirmaKod]"
+                      name="FirmaKod" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Sehir]"
+                      dataType="wstr"
+                      length="10"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Sehir]"
+                      name="Sehir" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[KurulusTarihi]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[KurulusTarihi]"
+                      name="KurulusTarihi" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Kredibilite]"
+                      dataType="ui1"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Kredibilite]"
+                      name="Kredibilite" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Iskonto]"
+                      dataType="ui1"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Iskonto]"
+                      name="Iskonto" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ReplaceNullIsInFirmaData\Insert Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Insert Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[FirmaData]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1254</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].Columns[FirmaKod]"
+                      cachedDataType="ui1"
+                      cachedName="FirmaKod"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[FirmaKod]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[FirmaKod]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].Columns[Sehir]"
+                      cachedDataType="wstr"
+                      cachedLength="10"
+                      cachedName="Sehir"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Sehir]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Sehir]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].Columns[KurulusTarihi]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="KurulusTarihi"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[KurulusTarihi]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].Columns[Kredibilite]"
+                      cachedDataType="ui1"
+                      cachedName="Kredibilite"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Kredibilite]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].Columns[Iskonto]"
+                      cachedDataType="ui1"
+                      cachedName="Iskonto"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Iskonto]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[FirmaKod]"
+                      dataType="ui1"
+                      name="FirmaKod" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Sehir]"
+                      dataType="wstr"
+                      length="10"
+                      name="Sehir" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[KurulusTarihi]"
+                      dataType="dbTimeStamp"
+                      name="KurulusTarihi" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Kredibilite]"
+                      dataType="ui1"
+                      name="Kredibilite" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Iskonto]"
+                      dataType="ui1"
+                      name="Iskonto" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ReplaceNullIsInFirmaData\OLE DB Command"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">UPDATE [dbo].[FirmaData] SET [Iskonto] = ?,[Kredibilite] = ?,[KurulusTarihi] = ?,[Sehir] = ? WHERE [FirmaKod] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1254</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].Columns[FirmaKod]"
+                      cachedDataType="ui1"
+                      cachedName="FirmaKod"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[FirmaKod]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].Columns[Iskonto]"
+                      cachedDataType="ui1"
+                      cachedName="Iskonto"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].Columns[Kredibilite]"
+                      cachedDataType="ui1"
+                      cachedName="Kredibilite"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].Columns[KurulusTarihi]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="KurulusTarihi"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].Columns[Sehir]"
+                      cachedDataType="wstr"
+                      cachedLength="10"
+                      cachedName="Sehir"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Sehir]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      dataType="ui1"
+                      name="Param_0">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      dataType="ui1"
+                      name="Param_1">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
+                      dataType="dbTimeStamp"
+                      name="Param_2">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
+                      dataType="wstr"
+                      length="10"
+                      name="Param_3">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
+                      dataType="ui1"
+                      name="Param_4">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command 1"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">UPDATE [dbo].[FirmaData] SET [Iskonto] = ? WHERE [FirmaKod] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1254</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[FirmaKod]"
+                      cachedDataType="ui1"
+                      cachedName="FirmaKod"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[FirmaKod]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Iskonto]"
+                      cachedDataType="ui1"
+                      cachedName="Iskonto"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      dataType="ui1"
+                      name="Param_0">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      dataType="ui1"
+                      name="Param_1">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ReplaceNullIsInFirmaData\ReplaceNulls"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="ReplaceNulls"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Inputs[Derived Column Input].Columns[Kredibilite]"
+                      cachedDataType="ui1"
+                      cachedName="Kredibilite"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]" />
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Inputs[Derived Column Input].Columns[Iskonto]"
+                      cachedDataType="ui1"
+                      cachedName="Iskonto"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]"
+                      truncationRowDisposition="FailComponent"
+                      usageType="readWrite">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[REPLACENULL](#{Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]},#{Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]} &gt;= 60 ? (#{Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Output].Columns[FirmaYas]} &gt; 10 ? (25) : (20)) : (#{Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]} &gt;= 40 ? (@[User::HalfMinMax]) : ([FLOOR](@[User::WeightedCredibility] * #{Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Output].Columns[FirmaYas]} / 100))))</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">REPLACENULL(Iskonto,Kredibilite &gt;= 60 ? (FirmaYas &gt; 10 ? (25) : (20)) : (Kredibilite &gt;= 40 ? (@[User::HalfMinMax]) : (FLOOR(@[User::WeightedCredibility] * FirmaYas / 100))))</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Inputs[Derived Column Input].Columns[FirmaYas]"
+                      cachedDataType="i4"
+                      cachedName="FirmaYas"
+                      lineageId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Output].Columns[FirmaYas]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Inputs[Derived Column Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData"
+              componentClassID="Microsoft.SCD"
+              contactInfo="Slowly Changing Dimension;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;3"
+              description="Updates a SQL Server Analysis Services data warehouse dimension. Update dimension records that are already present and  insert dimension records that aren't. For example, update the DimProduct table of the AdventureWorksDW OLAP database with data from the Products table in the AdventureWorks OLTP database."
+              name="UpdateIskontoInFirmaData"
+              version="3">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SELECT statement used to create a schema rowset."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT [FirmaKod], [Iskonto], [Kredibilite], [KurulusTarihi], [Sehir] FROM [dbo].[FirmaData]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the WHERE clause in the SELECT statement that selects the current row among rows with identical business keys."
+                  name="CurrentRowWhere"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether historical attribute updates are directed to the transformation output for changing attribute updates."
+                  name="UpdateChangingAttributeHistory">true</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the transformation fails when columns with fixed attributes contain changes."
+                  name="FailOnFixedAttributeChange">true</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the column name for the inferred member."
+                  name="InferredMemberIndicator"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether inferred member updates are detected."
+                  name="EnableInferredMember">true</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the transformation fails when a lookup of an existing record fails."
+                  name="FailOnLookupFailure">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies that all rows in the input are new or the transformation detects the change type."
+                  name="IncomingRowChangeType"
+                  typeConverter="IncomingRowChangeType">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1254</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Connections[LookupConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  description="Defines the connection to use for lookups in the dimension table"
+                  name="LookupConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]"
+                  name="Slowly Changing Dimension Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].Columns[FirmaKod]"
+                      cachedDataType="ui1"
+                      cachedName="FirmaKod"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[FirmaKod]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[FirmaKod]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">1</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].Columns[Iskonto]"
+                      cachedDataType="ui1"
+                      cachedName="Iskonto"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[Iskonto]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">2</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].Columns[Kredibilite]"
+                      cachedDataType="ui1"
+                      cachedName="Kredibilite"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[Kredibilite]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">4</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].Columns[KurulusTarihi]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="KurulusTarihi"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[KurulusTarihi]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">4</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].Columns[Sehir]"
+                      cachedDataType="wstr"
+                      cachedLength="10"
+                      cachedName="Sehir"
+                      externalMetadataColumnId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[Sehir]"
+                      lineageId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Sehir]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">4</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[FirmaKod]"
+                      dataType="ui1"
+                      name="FirmaKod" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[Iskonto]"
+                      dataType="ui1"
+                      name="Iskonto" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[Kredibilite]"
+                      dataType="ui1"
+                      name="Kredibilite" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[KurulusTarihi]"
+                      dataType="dbTimeStamp"
+                      name="KurulusTarihi" />
+                    <externalMetadataColumn
+                      refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input].ExternalColumns[Sehir]"
+                      dataType="wstr"
+                      length="10"
+                      name="Sehir" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Outputs[Unchanged Output]"
+                  description="Unchanged rows"
+                  exclusionGroup="1"
+                  name="Unchanged Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Outputs[New Output]"
+                  description="New rows"
+                  exclusionGroup="1"
+                  name="New Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Outputs[Fixed Attribute Output]"
+                  description="Rows with changes in columns tagged FixedAttribute"
+                  exclusionGroup="1"
+                  name="Fixed Attribute Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Outputs[Changing Attribute Updates Output]"
+                  description="These rows contain new information for ChangingAttribute (Type 1) column changes"
+                  exclusionGroup="1"
+                  name="Changing Attribute Updates Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Outputs[Historical Attribute Inserts Output]"
+                  description="HistoricalAttribute (Type 2) changes result in these new rows"
+                  exclusionGroup="2"
+                  name="Historical Attribute Inserts Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Outputs[Inferred Member Updates Output]"
+                  description="Information to update unpopulated initial dimension row"
+                  exclusionGroup="1"
+                  name="Inferred Member Updates Output"
+                  synchronousInputId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\ReplaceNullIsInFirmaData.Paths[Changing Attribute Updates Output]"
+              endId="Package\ReplaceNullIsInFirmaData\OLE DB Command 1.Inputs[OLE DB Command Input]"
+              name="Changing Attribute Updates Output"
+              startId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Outputs[Changing Attribute Updates Output]" />
+            <path
+              refId="Package\ReplaceNullIsInFirmaData.Paths[Derived Column Output]"
+              endId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Inputs[Derived Column Input]"
+              name="Derived Column Output"
+              startId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\ReplaceNullIsInFirmaData.Paths[Derived Column Output1]"
+              endId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]"
+              name="Derived Column Output"
+              startId="Package\ReplaceNullIsInFirmaData\ReplaceNulls.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\ReplaceNullIsInFirmaData.Paths[Inferred Member Updates Output]"
+              endId="Package\ReplaceNullIsInFirmaData\OLE DB Command.Inputs[OLE DB Command Input]"
+              name="Inferred Member Updates Output"
+              startId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Outputs[Inferred Member Updates Output]" />
+            <path
+              refId="Package\ReplaceNullIsInFirmaData.Paths[New Output]"
+              endId="Package\ReplaceNullIsInFirmaData\Insert Destination.Inputs[OLE DB Destination Input]"
+              name="New Output"
+              startId="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData.Outputs[New Output]" />
+            <path
+              refId="Package\ReplaceNullIsInFirmaData.Paths[OLE DB Source Output]"
+              endId="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas.Inputs[Derived Column Input]"
+              name="OLE DB Source Output"
+              startId="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{A3D05513-B949-4914-9721-14C4D5F4D2AB}"
+      DTS:From="Package\DropTableFirmaData"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\CreateTableFirmaData" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{50D30694-E009-42AF-885A-7AA0E999B54D}"
+      DTS:From="Package\CreateTableFirmaData"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\InsertDataInfirmaData" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{CF6FA2C0-7F1E-48F8-A4CF-F8310DC4709D}"
+      DTS:From="Package\InsertDataInfirmaData"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\CalculateWeightedCredibility" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{537C5D53-E28B-4A79-A0E9-A495E1F79D07}"
+      DTS:From="Package\CalculateWeightedCredibility"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\CalculateHalfMinMax" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{F176E1CC-CDD5-46BA-889B-7E983B79D3A0}"
+      DTS:From="Package\CalculateHalfMinMax"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\ReplaceNullIsInFirmaData" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="176,42"
+          Id="Package\CalculateHalfMinMax"
+          TopLeft="515,300" />
+        <NodeLayout
+          Size="212,42"
+          Id="Package\CalculateWeightedCredibility"
+          TopLeft="271,295" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\CreateTableFirmaData"
+          TopLeft="123,121" />
+        <NodeLayout
+          Size="176,42"
+          Id="Package\DropTableFirmaData"
+          TopLeft="52,43" />
+        <NodeLayout
+          Size="185,42"
+          Id="Package\InsertDataInfirmaData"
+          TopLeft="197,198" />
+        <NodeLayout
+          Size="201,42"
+          Id="Package\ReplaceNullIsInFirmaData"
+          TopLeft="403,401" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="140,85">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="75,36"
+              Start="0,0"
+              End="75,28.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,14" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,14"
+                    Point2="0,18"
+                    Point3="4,18" />
+                  <mssgle:LineSegment
+                    End="71,18" />
+                  <mssgle:CubicBezierSegment
+                    Point1="71,18"
+                    Point2="75,18"
+                    Point3="75,22" />
+                  <mssgle:LineSegment
+                    End="75,28.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="215,163">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="74.5,35"
+              Start="0,0"
+              End="74.5,27.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,13.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,13.5"
+                    Point2="0,17.5"
+                    Point3="4,17.5" />
+                  <mssgle:LineSegment
+                    End="70.5,17.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="70.5,17.5"
+                    Point2="74.5,17.5"
+                    Point3="74.5,21.5" />
+                  <mssgle:LineSegment
+                    End="74.5,27.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="289.5,240">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="87.5,55"
+              Start="0,0"
+              End="87.5,47.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,23.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,23.5"
+                    Point2="0,27.5"
+                    Point3="4,27.5" />
+                  <mssgle:LineSegment
+                    End="83.5,27.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="83.5,27.5"
+                    Point2="87.5,27.5"
+                    Point3="87.5,31.5" />
+                  <mssgle:LineSegment
+                    End="87.5,47.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="483,318.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="32,0"
+              Start="0,0"
+              End="24.5,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="24.5,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="603,342">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-99.5,59"
+              Start="0,0"
+              End="-99.5,51.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,25.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,25.5"
+                    Point2="0,29.5"
+                    Point3="-4,29.5" />
+                  <mssgle:LineSegment
+                    End="-95.5,29.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-95.5,29.5"
+                    Point2="-99.5,29.5"
+                    Point3="-99.5,33.5" />
+                  <mssgle:LineSegment
+                    End="-99.5,51.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\ReplaceNullIsInFirmaData">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="206,42"
+          Id="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData"
+          TopLeft="207.5,311.5" />
+        <NodeLayout
+          Size="166,42"
+          Id="Package\ReplaceNullIsInFirmaData\OLE DB Command"
+          TopLeft="229,413.5" />
+        <NodeLayout
+          Size="138,42"
+          Id="Package\ReplaceNullIsInFirmaData\ReplaceNulls"
+          TopLeft="230.5,209.5" />
+        <NodeLayout
+          Size="192,42"
+          Id="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource"
+          TopLeft="216,5.49999999999989" />
+        <NodeLayout
+          Size="163,42"
+          Id="Package\ReplaceNullIsInFirmaData\Insert Destination"
+          TopLeft="5.50000000000006,413.5" />
+        <NodeLayout
+          Size="175,42"
+          Id="Package\ReplaceNullIsInFirmaData\OLE DB Command 1"
+          TopLeft="455.5,413.5" />
+        <NodeLayout
+          Size="164,42"
+          Id="Package\ReplaceNullIsInFirmaData\CalculateFirmaYas"
+          TopLeft="235,107.5" />
+        <EdgeLayout
+          Id="Package\ReplaceNullIsInFirmaData.Paths[OLE DB Source Output]"
+          TopLeft="314.5,47.4999999999999">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ReplaceNullIsInFirmaData.Paths[New Output]"
+          TopLeft="261,353.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-174,60"
+              Start="0,0"
+              End="-174,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.5111821086262" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.5111821086262"
+                    Point2="0,20.5111821086262"
+                    Point3="-4,20.5111821086262" />
+                  <mssgle:LineSegment
+                    End="-170,20.5111821086262" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-170,20.5111821086262"
+                    Point2="-174,20.5111821086262"
+                    Point3="-174,24.5111821086262" />
+                  <mssgle:LineSegment
+                    End="-174,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-114.09138671875,25.5111821086262,54.1827734375,11.43359375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ReplaceNullIsInFirmaData.Paths[Inferred Member Updates Output]"
+          TopLeft="311.25,353.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-74.40298828125,20.4208984375,148.8059765625,11.658203125"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ReplaceNullIsInFirmaData.Paths[Derived Column Output1]"
+          TopLeft="299.5,251.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="11,60"
+              Start="0,0"
+              End="11,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26"
+                    Point2="0,30"
+                    Point3="4,30" />
+                  <mssgle:LineSegment
+                    End="7,30" />
+                  <mssgle:CubicBezierSegment
+                    Point1="7,30"
+                    Point2="11,30"
+                    Point3="11,34" />
+                  <mssgle:LineSegment
+                    End="11,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ReplaceNullIsInFirmaData.Paths[Derived Column Output]"
+          TopLeft="317,149.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-17.5,60"
+              Start="0,0"
+              End="-17.5,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26"
+                    Point2="0,30"
+                    Point3="-4,30" />
+                  <mssgle:LineSegment
+                    End="-13.5,30" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-13.5,30"
+                    Point2="-17.5,30"
+                    Point3="-17.5,34" />
+                  <mssgle:LineSegment
+                    End="-17.5,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ReplaceNullIsInFirmaData.Paths[Changing Attribute Updates Output]"
+          TopLeft="360,353.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="183,60"
+              Start="0,0"
+              End="183,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.5111821086262" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.5111821086262"
+                    Point2="0,20.5111821086262"
+                    Point3="4,20.5111821086262" />
+                  <mssgle:LineSegment
+                    End="179,20.5111821086262" />
+                  <mssgle:CubicBezierSegment
+                    Point1="179,20.5111821086262"
+                    Point2="183,20.5111821086262"
+                    Point3="183,24.5111821086262" />
+                  <mssgle:LineSegment
+                    End="183,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="12.96609375,25.5111821086262,157.0678125,11.6630859375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\ReplaceNullIsInFirmaData\UpdateIskontoInFirmaData">
+    <Properties>
+      <Property>
+        <Name>SCDMetadata</Name>
+        <Value
+          type="q2:string">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SCDWizardMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionID&gt;{AFCD9CE1-0AC1-4B9E-ABC5-DF8279EBD396}&lt;/ConnectionID&gt;
+  &lt;TableName&gt;[dbo].[FirmaData]&lt;/TableName&gt;
+  &lt;InputToColumnsCollection&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[FirmaKod]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;FirmaKod&lt;/ColumnName&gt;
+      &lt;KeyType&gt;BusinessKey&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Iskonto&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;ChangingAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Kredibilite&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;FixedAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;KurulusTarihi&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;FixedAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Sehir]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Sehir&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;FixedAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+  &lt;/InputToColumnsCollection&gt;
+  &lt;GeneratedComponentsIdentificationStrings&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Insert Destination&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command 1&lt;/anyType&gt;
+  &lt;/GeneratedComponentsIdentificationStrings&gt;
+  &lt;FailFixedAttribute&gt;true&lt;/FailFixedAttribute&gt;
+  &lt;FailChangeAttribute&gt;true&lt;/FailChangeAttribute&gt;
+  &lt;UseStartEndDate&gt;false&lt;/UseStartEndDate&gt;
+  &lt;CurrentIndicatorColumn /&gt;
+  &lt;InferredIndicatorColumn /&gt;
+  &lt;ValueCurrent /&gt;
+  &lt;ValueExpired /&gt;
+  &lt;StartDateColumn /&gt;
+  &lt;EndDateColumn /&gt;
+  &lt;DateVariable /&gt;
+  &lt;EnableInferredSupport&gt;true&lt;/EnableInferredSupport&gt;
+&lt;/SCDWizardMetadata&gt;</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\ReplaceNullIsInFirmaData\FirmaDataOLEDBSource">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

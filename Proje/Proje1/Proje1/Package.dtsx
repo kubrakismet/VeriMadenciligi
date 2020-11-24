@@ -1,0 +1,960 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/9/2019 3:22:55 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-SJ08IUG"
+  DTS:CreatorName="DESKTOP-SJ08IUG\hp"
+  DTS:DTSID="{0BB444BC-8C0C-46BE-8FB0-9929481457A8}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.1100.123"
+  DTS:LocaleID="1055"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="1"
+  DTS:VersionGUID="{F281C3A9-9DAD-4EB6-993C-B691BF3AE7CD}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{999C4D79-E498-4C3C-9E21-5F83E5136BF8}"
+      DTS:ObjectName="DESKTOP-SJ08IUG\MSSQLSERVER13.Proje">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=DESKTOP-SJ08IUG\MSSQLSERVER13;Initial Catalog=Proje;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{D2D3D230-4C16-4443-88E6-7A165309DAC6}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="FirmaData">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{FFA72FC1-4AF4-4C05-A41C-0693835BBDD6}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="HalfMinMax">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{3FAF49C6-9E56-4C5D-8261-C9EB9E4BD4E3}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="WeightedCredibility">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\CalculateHalfMinMax"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{2AF81DD2-AEC4-45C1-8931-59D14506A106}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CalculateHalfMinMax"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{999C4D79-E498-4C3C-9E21-5F83E5136BF8}"
+          SQLTask:SqlStatementSource="SELECT (MIN(Iskonto)+MAX(Iskonto))/2 AS HalfMinMax FROM FirmaData"
+          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="HalfMinMax"
+            SQLTask:DtsVariableName="User::HalfMinMax" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\CalculateWeightedCredibility"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{257FD27C-778D-42CC-BB1E-076871F4D5AC}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CalculateWeightedCredibility"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{999C4D79-E498-4C3C-9E21-5F83E5136BF8}"
+          SQLTask:SqlStatementSource="SELECT ROUND(SUM(Kredibilite*YEAR(GETDATE()-KurulusTarihi))/SUM(YEAR(GETDATE()-KurulusTarihi)),-1) AS WeightedCredibility FROM FirmaData"
+          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="WeightedCredibility"
+            SQLTask:DtsVariableName="User::WeightedCredibility" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\CreateTableFirmaData"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{EAFD4DA9-EBEC-409B-B7AF-76499382E5F9}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="CreateTableFirmaData"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{999C4D79-E498-4C3C-9E21-5F83E5136BF8}"
+          SQLTask:SqlStatementSource="CREATE TABLE [dbo].[FirmaData](&#xA;&#x9;[FirmaKod] [tinyint] NULL,&#xA;&#x9;[Sehir] [nvarchar](10) NULL,&#xA;&#x9;[KurulusTarihi] [smalldatetime] NULL,&#xA;&#x9;[Kredibilite] [tinyint] NULL,&#xA;&#x9;[Iskonto] [tinyint] NULL&#xA;)" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Data Flow Task"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{D20E7DAD-5CF9-4D21-B7F9-0825B0BF2D79}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Data Flow Task"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Data Flow Task\CalculateFirmaYas"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="CalculateFirmaYas"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\CalculateFirmaYas.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\CalculateFirmaYas.Inputs[Derived Column Input].Columns[KurulusTarihi]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="KurulusTarihi"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\CalculateFirmaYas.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Data Flow Task\CalculateFirmaYas.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\CalculateFirmaYas.Outputs[Derived Column Output].Columns[FirmaYas]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Data Flow Task\CalculateFirmaYas.Outputs[Derived Column Output].Columns[FirmaYas]"
+                      name="FirmaYas"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[YEAR]([GETDATE]()) - [YEAR](#{Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]})</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">YEAR(GETDATE()) - YEAR(KurulusTarihi)</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\CalculateFirmaYas.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Data Flow Task\CalculateFirmaYas.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\CalculateFirmaYas.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\CalculateFirmaYas.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\CalculateFirmaYas.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\CalculateFirmaYas.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\FirmaDataOLEDBSource"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="FirmaDataOLEDBSource"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[FirmaData]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1254</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\FirmaDataOLEDBSource.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-SJ08IUG\MSSQLSERVER13.Proje]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[FirmaKod]"
+                      dataType="ui1"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[FirmaKod]"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[FirmaKod]"
+                      name="FirmaKod"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Sehir]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Sehir]"
+                      length="10"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Sehir]"
+                      name="Sehir"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[KurulusTarihi]"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[KurulusTarihi]"
+                      name="KurulusTarihi"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]"
+                      dataType="ui1"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Kredibilite]"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Kredibilite]"
+                      name="Kredibilite"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]"
+                      dataType="ui1"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Iskonto]"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].Columns[Iskonto]"
+                      name="Iskonto"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[FirmaKod]"
+                      dataType="ui1"
+                      name="FirmaKod" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Sehir]"
+                      dataType="wstr"
+                      length="10"
+                      name="Sehir" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[KurulusTarihi]"
+                      dataType="dbTimeStamp"
+                      name="KurulusTarihi" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Kredibilite]"
+                      dataType="ui1"
+                      name="Kredibilite" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output].ExternalColumns[Iskonto]"
+                      dataType="ui1"
+                      name="Iskonto" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[FirmaKod]"
+                      dataType="ui1"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[FirmaKod]"
+                      name="FirmaKod" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Sehir]"
+                      dataType="wstr"
+                      length="10"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Sehir]"
+                      name="Sehir" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[KurulusTarihi]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[KurulusTarihi]"
+                      name="KurulusTarihi" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Kredibilite]"
+                      dataType="ui1"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Kredibilite]"
+                      name="Kredibilite" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Iskonto]"
+                      dataType="ui1"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[Iskonto]"
+                      name="Iskonto" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\ReplaceNulls"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="ReplaceNulls"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\ReplaceNulls.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\ReplaceNulls.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Data Flow Task\ReplaceNulls.Inputs[Derived Column Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\ReplaceNulls.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Data Flow Task\ReplaceNulls.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\ReplaceNulls.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\ReplaceNulls.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\ReplaceNulls.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\ReplaceNulls.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\UpdateIskontoInFirmaData"
+              componentClassID="Microsoft.SCD"
+              contactInfo="Slowly Changing Dimension;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;3"
+              description="Updates a SQL Server Analysis Services data warehouse dimension. Update dimension records that are already present and  insert dimension records that aren't. For example, update the DimProduct table of the AdventureWorksDW OLAP database with data from the Products table in the AdventureWorks OLTP database."
+              name="UpdateIskontoInFirmaData"
+              version="3">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SELECT statement used to create a schema rowset."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the WHERE clause in the SELECT statement that selects the current row among rows with identical business keys."
+                  name="CurrentRowWhere"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether historical attribute updates are directed to the transformation output for changing attribute updates."
+                  name="UpdateChangingAttributeHistory">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the transformation fails when columns with fixed attributes contain changes."
+                  name="FailOnFixedAttributeChange">true</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the column name for the inferred member."
+                  name="InferredMemberIndicator"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether inferred member updates are detected."
+                  name="EnableInferredMember">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the transformation fails when a lookup of an existing record fails."
+                  name="FailOnLookupFailure">false</property>
+                <property
+                  dataType="System.UInt32"
+                  description="Specifies that all rows in the input are new or the transformation detects the change type."
+                  name="IncomingRowChangeType"
+                  typeConverter="IncomingRowChangeType">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1254</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\UpdateIskontoInFirmaData.Connections[LookupConnection]"
+                  description="Defines the connection to use for lookups in the dimension table"
+                  name="LookupConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]"
+                  name="Slowly Changing Dimension Input">
+                  <externalMetadataColumns
+                    isUsed="True" />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\UpdateIskontoInFirmaData.Outputs[Unchanged Output]"
+                  description="Unchanged rows"
+                  exclusionGroup="1"
+                  name="Unchanged Output"
+                  synchronousInputId="Package\Data Flow Task\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\UpdateIskontoInFirmaData.Outputs[New Output]"
+                  description="New rows"
+                  exclusionGroup="1"
+                  name="New Output"
+                  synchronousInputId="Package\Data Flow Task\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\UpdateIskontoInFirmaData.Outputs[Fixed Attribute Output]"
+                  description="Rows with changes in columns tagged FixedAttribute"
+                  exclusionGroup="1"
+                  name="Fixed Attribute Output"
+                  synchronousInputId="Package\Data Flow Task\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\UpdateIskontoInFirmaData.Outputs[Changing Attribute Updates Output]"
+                  description="These rows contain new information for ChangingAttribute (Type 1) column changes"
+                  exclusionGroup="1"
+                  name="Changing Attribute Updates Output"
+                  synchronousInputId="Package\Data Flow Task\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\UpdateIskontoInFirmaData.Outputs[Historical Attribute Inserts Output]"
+                  description="HistoricalAttribute (Type 2) changes result in these new rows"
+                  exclusionGroup="2"
+                  name="Historical Attribute Inserts Output"
+                  synchronousInputId="Package\Data Flow Task\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\UpdateIskontoInFirmaData.Outputs[Inferred Member Updates Output]"
+                  description="Information to update unpopulated initial dimension row"
+                  exclusionGroup="1"
+                  name="Inferred Member Updates Output"
+                  synchronousInputId="Package\Data Flow Task\UpdateIskontoInFirmaData.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Data Flow Task.Paths[Derived Column Output]"
+              endId="Package\Data Flow Task\ReplaceNulls.Inputs[Derived Column Input]"
+              name="Derived Column Output"
+              startId="Package\Data Flow Task\CalculateFirmaYas.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Data Flow Task.Paths[OLE DB Source Output]"
+              endId="Package\Data Flow Task\CalculateFirmaYas.Inputs[Derived Column Input]"
+              name="OLE DB Source Output"
+              startId="Package\Data Flow Task\FirmaDataOLEDBSource.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\DropTableFirmaData"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{5262A597-0CD6-4808-A6AE-26A8E44FA7F8}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="DropTableFirmaData"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{999C4D79-E498-4C3C-9E21-5F83E5136BF8}"
+          SQLTask:SqlStatementSource="DROP TABLE IF EXISTS [dbo].[FirmaData]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\InsertDataInFirmaData"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{0C7712C7-D567-414D-A2A4-E2677E8D145E}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="InsertDataInFirmaData"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{999C4D79-E498-4C3C-9E21-5F83E5136BF8}"
+          SQLTask:SqlStatementSource="INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (100, N'İstanbul', CAST(N'2009-06-07T00:00:00' AS SmallDateTime), 100, 30)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (101, N'Ankara', CAST(N'2005-02-10T00:00:00' AS SmallDateTime), 20, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (102, N'İstanbul', CAST(N'2011-08-07T00:00:00' AS SmallDateTime), 70, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (103, N'Sakarya', CAST(N'2008-10-29T00:00:00' AS SmallDateTime), 70, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (104, N'Kocaeli', CAST(N'2009-05-18T00:00:00' AS SmallDateTime), 0, 0)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (105, N'Bursa', CAST(N'2016-09-24T00:00:00' AS SmallDateTime), 60, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (106, N'Bolu', CAST(N'1999-03-19T00:00:00' AS SmallDateTime), 40, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (107, N'Sakarya', CAST(N'2016-04-10T00:00:00' AS SmallDateTime), 60, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (108, N'İstanbul', CAST(N'2013-04-17T00:00:00' AS SmallDateTime), 100, 30)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (109, N'İstanbul', CAST(N'2007-05-29T00:00:00' AS SmallDateTime), 50, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (110, N'Ankara', CAST(N'2008-11-24T00:00:00' AS SmallDateTime), 10, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (111, N'Gümüşhane', CAST(N'1997-07-17T00:00:00' AS SmallDateTime), 100, 30)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (112, N'Antalya', CAST(N'2012-03-27T00:00:00' AS SmallDateTime), 80, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (113, N'Kayseri', CAST(N'1996-05-28T00:00:00' AS SmallDateTime), 30, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (114, N'Ankara', CAST(N'2006-01-02T00:00:00' AS SmallDateTime), 50, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (115, N'Düzce', CAST(N'2017-06-26T00:00:00' AS SmallDateTime), 100, 30)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (116, N'Sakarya', CAST(N'2015-01-02T00:00:00' AS SmallDateTime), 10, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (117, N'İstanbul', CAST(N'2004-08-24T00:00:00' AS SmallDateTime), 10, NULL)&#xA;INSERT [dbo].[FirmaData] ([FirmaKod], [Sehir], [KurulusTarihi], [Kredibilite], [Iskonto]) VALUES (118, N'İstanbul', CAST(N'1998-10-18T00:00:00' AS SmallDateTime), 60, NULL)&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{A5066D19-47A4-4F6A-9A0E-A0FAB0BDDBE8}"
+      DTS:From="Package\DropTableFirmaData"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\CreateTableFirmaData" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{9E5ADC4E-A2F6-408A-A32D-B5B0F054015E}"
+      DTS:From="Package\CreateTableFirmaData"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\InsertDataInFirmaData" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{22CF19A7-369E-4F70-AFF0-993A773ABD8F}"
+      DTS:From="Package\InsertDataInFirmaData"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\CalculateWeightedCredibility" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{00A0A8C9-26C8-4B03-B9E9-B3DC08F4F281}"
+      DTS:From="Package\CalculateWeightedCredibility"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\CalculateHalfMinMax" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{501E29F8-346E-41E8-9A7D-F8FB9B877A82}"
+      DTS:From="Package\CalculateHalfMinMax"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\Data Flow Task" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="176,42"
+          Id="Package\DropTableFirmaData"
+          TopLeft="52,50" />
+        <NodeLayout
+          Size="184,42"
+          Id="Package\CreateTableFirmaData"
+          TopLeft="71,126" />
+        <NodeLayout
+          Size="187,42"
+          Id="Package\InsertDataInFirmaData"
+          TopLeft="93,211" />
+        <NodeLayout
+          Size="212,42"
+          Id="Package\CalculateWeightedCredibility"
+          TopLeft="194,295" />
+        <NodeLayout
+          Size="176,42"
+          Id="Package\CalculateHalfMinMax"
+          TopLeft="459,303" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="140,92">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="23,34"
+              Start="0,0"
+              End="23,26.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,13" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,13"
+                    Point2="0,17"
+                    Point3="4,17" />
+                  <mssgle:LineSegment
+                    End="19,17" />
+                  <mssgle:CubicBezierSegment
+                    Point1="19,17"
+                    Point2="23,17"
+                    Point3="23,21" />
+                  <mssgle:LineSegment
+                    End="23,26.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="163,168">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="23.5,43"
+              Start="0,0"
+              End="23.5,35.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,17.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,17.5"
+                    Point2="0,21.5"
+                    Point3="4,21.5" />
+                  <mssgle:LineSegment
+                    End="19.5,21.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="19.5,21.5"
+                    Point2="23.5,21.5"
+                    Point3="23.5,25.5" />
+                  <mssgle:LineSegment
+                    End="23.5,35.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="186.5,253">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="113.5,42"
+              Start="0,0"
+              End="113.5,34.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,17" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,17"
+                    Point2="0,21"
+                    Point3="4,21" />
+                  <mssgle:LineSegment
+                    End="109.5,21" />
+                  <mssgle:CubicBezierSegment
+                    Point1="109.5,21"
+                    Point2="113.5,21"
+                    Point3="113.5,25" />
+                  <mssgle:LineSegment
+                    End="113.5,34.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="406,316">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="53,8"
+              Start="0,0"
+              End="45.5,8">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="22.5,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="22.5,0"
+                    Point2="26.5,0"
+                    Point3="26.5,4" />
+                  <mssgle:LineSegment
+                    End="26.5,4" />
+                  <mssgle:CubicBezierSegment
+                    Point1="26.5,4"
+                    Point2="26.5,8"
+                    Point3="30.5,8" />
+                  <mssgle:LineSegment
+                    End="45.5,8" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="151,42"
+          Id="Package\Data Flow Task"
+          TopLeft="459,427" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="547,345">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-12.5,82"
+              Start="0,0"
+              End="-12.5,74.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,37" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,37"
+                    Point2="0,41"
+                    Point3="-4,41" />
+                  <mssgle:LineSegment
+                    End="-8.5,41" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-8.5,41"
+                    Point2="-12.5,41"
+                    Point3="-12.5,45" />
+                  <mssgle:LineSegment
+                    End="-12.5,74.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Data Flow Task">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="192,42"
+          Id="Package\Data Flow Task\FirmaDataOLEDBSource"
+          TopLeft="68,56" />
+        <NodeLayout
+          Size="206,42"
+          Id="Package\Data Flow Task\UpdateIskontoInFirmaData"
+          TopLeft="338,271" />
+        <NodeLayout
+          Size="164,42"
+          Id="Package\Data Flow Task\CalculateFirmaYas"
+          TopLeft="157,132" />
+        <NodeLayout
+          Size="138,42"
+          Id="Package\Data Flow Task\ReplaceNulls"
+          TopLeft="292,208" />
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
+          TopLeft="164,98">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="75,34"
+              Start="0,0"
+              End="75,26.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,13" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,13"
+                    Point2="0,17"
+                    Point3="4,17" />
+                  <mssgle:LineSegment
+                    End="71,17" />
+                  <mssgle:CubicBezierSegment
+                    Point1="71,17"
+                    Point2="75,17"
+                    Point3="75,21" />
+                  <mssgle:LineSegment
+                    End="75,26.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Derived Column Output]"
+          TopLeft="239,174">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="122,34"
+              Start="0,0"
+              End="122,26.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,13" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,13"
+                    Point2="0,17"
+                    Point3="4,17" />
+                  <mssgle:LineSegment
+                    End="118,17" />
+                  <mssgle:CubicBezierSegment
+                    Point1="118,17"
+                    Point2="122,17"
+                    Point3="122,21" />
+                  <mssgle:LineSegment
+                    End="122,26.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\FirmaDataOLEDBSource">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

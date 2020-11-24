@@ -1,0 +1,1 @@
+SELECT (MIN(Iskonto)+MAX(Iskonto))/2 AS HalfMinMax FROM FirmaData

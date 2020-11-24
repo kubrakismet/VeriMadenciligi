@@ -1,0 +1,1 @@
+REPLACENULL(Iskonto,Kredibilite >= 60 ? (FirmaYas > 10 ? (25) : (20)) : (Kredibilite >= 40 ? (@[User::HalfMinMax]) : (FLOOR(@[User::WCredi] * FirmaYas / 100))))
